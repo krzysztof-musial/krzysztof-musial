@@ -1,0 +1,94 @@
+---
+import { Icon } from "astro-icon";
+---
+
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Krzysztof Musiał | {Astro.props.frontmatter.title}</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a href="/">
+          <Icon
+            name="logo"
+            class="w-8 h-8 fill-primary-700 dark:fill-primary-400 dark:hover:fill-primary-200 transition-all hover:fill-primary-900"
+          />
+        </a>
+        <button id="themeButton"><div id="themeToggle"></div></button>
+      </header>
+      <article>
+        <slot />
+      </article>
+      <!-- <footer>Footer</footer> -->
+    </main>
+  </body>
+</html>
+
+<script is:inline>
+  const initTheme = () => {
+    const theme = localStorage.getItem("theme");
+    if (theme === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+  };
+
+  const changeTheme = () => {
+    const theme = localStorage.getItem("theme");
+    if (theme === "light") {
+      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+    }
+  };
+
+  initTheme();
+
+  document.getElementById("themeButton").addEventListener("click", changeTheme);
+</script>
+
+<style lang="scss" is:global>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+  body {
+    @apply bg-primary-50 text-primary-900 dark:bg-primary-900 dark:text-primary-100;
+
+    main {
+      @apply mx-auto grid min-h-screen max-w-screen-lg grid-cols-1 gap-8 p-4 sm:p-8 lg:gap-16 lg:p-16;
+      grid-template-rows: min-content 1fr min-content;
+
+      header {
+        @apply flex items-center justify-between gap-4 sm:gap-8 lg:gap-16;
+      }
+
+      article {
+        @apply prose prose-neutral max-w-none dark:prose-invert;
+      }
+
+      footer {
+      }
+    }
+  }
+
+  #themeButton {
+    @apply relative h-6 w-10 rounded-full bg-primary-200 ring-1 ring-inset ring-primary-400 dark:bg-primary-700 dark:ring-zinc-600;
+
+    #themeToggle {
+      @apply absolute left-1 top-1 h-4 w-4 rounded-full bg-primary-100 ring-1 ring-primary-400 transition-all dark:left-5 dark:bg-primary-500 dark:ring-inset dark:ring-primary-500;
+    }
+  }
+</style>
